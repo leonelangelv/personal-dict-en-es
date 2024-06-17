@@ -3,7 +3,7 @@
 const WORDS = 'WORDS';
 
 let word_items_init = {
-  A: [234234],
+  A: [],
   B: [],
   C: [],
   D: [],
