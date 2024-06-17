@@ -1,9 +1,9 @@
-import { txt } from './Text.js';
+// import { txt } from './Text.js';
 
 const WORDS = 'WORDS';
 
-const word_items_init = {
-  A: [],
+let word_items_init = {
+  A: [234234],
   B: [],
   C: [],
   D: [],
@@ -31,6 +31,23 @@ const word_items_init = {
   Z: []
 };
 
+let word_items_input;
+const $fileInput = document.getElementById('fileInput');
+$fileInput.addEventListener('change', (e) => {
+  const file = e.target.files[0];
+  const reader = new FileReader();
+  reader.onload = (event) => {
+    const content = event.target.result;
+    word_items_input = JSON.parse(content);
+  };
+  reader.readAsText(file);
+});
+
+const $loadTxt = document.getElementById('loadTxt');
+$loadTxt.addEventListener('click', () => {
+  saveItem(word_items_input);
+});
+
 function loadInitialData() {
   const storedData = localStorage.getItem(WORDS);
   return storedData ? JSON.parse(storedData) : word_items_init;
@@ -41,10 +58,6 @@ function saveItem(data) {
 }
 
 const wordsItems = loadInitialData();
-
-// Insert text
-const $insertText = document.getElementById('insertText');
-$insertText.innerText = txt;
 
 const $wordInput = document.getElementById('wordInput');
 const $translationInput = document.getElementById('translationInput');
@@ -121,12 +134,12 @@ const renderWordList = (data) => {
     const div = document.createElement('div');
     div.classList.add('form-row');
     const formRowHTML = `
-      <form id="${id}">
-        <input type="text" name="word" placeholder="Palabra" class="word-input" value='${word}' >
-        <input type="text" name="translation" placeholder="Traducción" class="translation-input" value="${translation}">
-        <button type="submit" class="edit-button">Editar</button>
-        <button type="submit" class="delete-button">Eliminar</button>
-      </form>
+    <form id="${id}">
+    <input type="text" name="word" placeholder="Palabra" class="word-input" value='${word}' >
+    <input type="text" name="translation" placeholder="Traducción" class="translation-input" value="${translation}">
+    <button type="submit" class="edit-button">Editar</button>
+    <button type="submit" class="delete-button">Eliminar</button>
+    </form>
     `;
     div.innerHTML = formRowHTML;
     fragment.appendChild(div);
@@ -212,7 +225,7 @@ document.getElementById('saveDBButton').addEventListener('click', () => {
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url;
-  a.download = 'words_en_es.txt';
+  a.download = 'my_words.txt';
   a.click();
   URL.revokeObjectURL(url);
 });
@@ -227,3 +240,24 @@ setInterval(() => {
   a.click();
   URL.revokeObjectURL(url);
 }, 600000);
+
+// Insert text whit local storage
+const $insertText = document.getElementById('insertText');
+const text = localStorage.getItem('text') || 'No hay texto'; // Use || for default value
+
+window.document.addEventListener('DOMContentLoaded', () => {
+  $insertText.innerText = text;
+});
+
+$insertText.addEventListener('click', (e) => {
+  $insertText.setAttribute('contenteditable', 'true');
+  if (text === 'No hay texto') {
+    $insertText.innerText = '';
+  }
+});
+
+const $saveText = document.getElementById('saveText');
+$saveText.addEventListener('click', () => {
+  $insertText.setAttribute('contenteditable', 'false');
+  localStorage.setItem('text', $insertText.innerText);
+});
