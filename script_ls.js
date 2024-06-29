@@ -46,6 +46,7 @@ $fileInput.addEventListener('change', (e) => {
 const $loadTxt = document.getElementById('loadTxt');
 $loadTxt.addEventListener('click', () => {
   saveItem(word_items_input);
+  window.location.reload();
 });
 
 function loadInitialData() {
@@ -260,4 +261,5 @@ const $saveText = document.getElementById('saveText');
 $saveText.addEventListener('click', () => {
   $insertText.setAttribute('contenteditable', 'false');
   localStorage.setItem('text', $insertText.innerText);
+  window.location.reload();
 });
