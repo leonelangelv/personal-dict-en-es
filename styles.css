@@ -23,6 +23,7 @@ body {
   padding: 20px;
   border-radius: .5rem;
   position: relative;
+  scroll-behavior: smooth;
 }
 
 .saveText {
