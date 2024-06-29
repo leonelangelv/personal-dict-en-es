@@ -2,6 +2,8 @@
 
 const WORDS = 'WORDS';
 
+let inputFocus = false;
+
 let word_items_init = {
   A: [],
   B: [],
@@ -64,6 +66,13 @@ const $wordInput = document.getElementById('wordInput');
 const $translationInput = document.getElementById('translationInput');
 const $addButton = document.getElementById('addButton');
 
+$wordInput.addEventListener('focusin', (e) => {
+  inputFocus = true;
+});
+$wordInput.addEventListener('focusout', (e) => {
+  inputFocus = false;
+});
+
 function capitalize(str) {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
@@ -112,9 +121,16 @@ const $modal = document.querySelector('.modal');
 const $closeButton = document.querySelector('.close-button');
 
 $alphabet.addEventListener('click', async (e) => {
-  openModal();
-  const letterValue = e.target.value;
+  showWorList(e.target.value);
+});
 
+document.addEventListener('keypress', function (event) {
+  if (!inputFocus) showWorList(event.key.toUpperCase());
+});
+
+const showWorList = (letterValue) => {
+  closeModal();
+  openModal();
   const data = wordsItems[letterValue];
 
   if (!data || data.length === 0) {
@@ -124,7 +140,7 @@ $alphabet.addEventListener('click', async (e) => {
   }
 
   renderWordList(data);
-});
+};
 
 // Función para renderizar la lista de palabras en la modal
 const renderWordList = (data) => {
@@ -244,7 +260,24 @@ setInterval(() => {
 
 // Insert text whit local storage
 const $insertText = document.getElementById('insertText');
-const text = localStorage.getItem('text') || 'No hay texto'; // Use || for default value
+const text = localStorage.getItem('text') || 'No hay texto';
+
+document.addEventListener('keydown', function (e) {
+  if (!inputFocus) {
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      $insertText.scrollTop += 50;
+    }
+    if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      $insertText.scrollTop -= 50;
+    }
+
+    if (e.key === 'Escape') {
+      closeModal();
+    }
+  }
+});
 
 window.document.addEventListener('DOMContentLoaded', () => {
   $insertText.innerText = text;
