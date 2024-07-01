@@ -72,6 +72,12 @@ $wordInput.addEventListener('focusin', (e) => {
 $wordInput.addEventListener('focusout', (e) => {
   inputFocus = false;
 });
+$translationInput.addEventListener('focusin', (e) => {
+  inputFocus = true;
+});
+$translationInput.addEventListener('focusout', (e) => {
+  inputFocus = false;
+});
 
 function capitalize(str) {
   return str.charAt(0).toUpperCase() + str.slice(1);
